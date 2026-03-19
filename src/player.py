@@ -1,18 +1,19 @@
-import uuid
+from nanoid import generate
+from room import Room
 
 class Player:
-    def __init__(self, name):
-        self.id = uuid.uuid8()
+    def __init__(self, name: str):
+        self.id = generate()
         self.name = name
         self.is_host = False
         self.played_card = ''
         self.room_id = None
 
-    def play_card(self, card):
-        self.play_card = card
+    def play_card(self, card: str):
+        self.played_card = card
         return self.played_card
     
-    def join_room(self):
+    def join_room(self, ):
         pass
 
 class Host(Player):
@@ -23,8 +24,8 @@ class Host(Player):
     def host_room(self):
         pass
 
-    def change_story(self, room, story):
-        pass 
+    def change_story(self, room: Room, story : str):
+        pass
 
     def call_vote(self):
         pass
