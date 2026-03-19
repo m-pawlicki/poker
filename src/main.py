@@ -1,5 +1,9 @@
+from room import RoomManager
+
 def main():
-    pass
+    
+    URL = ""
+    room_manager = RoomManager()
 
 if __name__ == "__main__":
     main()
