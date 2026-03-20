@@ -30,6 +30,16 @@ class Player:
     def change_name(self, name):
         self.name = name
         return self.name
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "is_host": self.is_host,
+            "played_card": self.played_card,
+            "room_id": self.room_id,
+        }
+
 
 class Host(Player):
     def __init__(self, name: str):

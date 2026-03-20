@@ -96,3 +96,12 @@ class Room:
     def update_story(self, story: str):
         self.curr_story = story
         return self.curr_story
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+        "creator_id" : self.creator_id,
+        "vote_state": self.vote_state,
+        "curr_story": self.curr_story,
+        "player_list": [player.to_dict() for player in self.player_list],
+        }
