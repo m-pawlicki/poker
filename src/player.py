@@ -15,6 +15,7 @@ class Player:
         if card in Cards.DECK:
             self.played_card = card
             return self.played_card
+        return None
         
     def clear_card(self):
         self.played_card = ""

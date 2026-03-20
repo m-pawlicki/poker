@@ -1,9 +1,11 @@
 from room import RoomManager
+from flask import Flask
 
-def main():
-    
-    URL = ""
-    room_manager = RoomManager()
 
-if __name__ == "__main__":
-    main()
+app = Flask(__name__)
+
+room_manager = RoomManager()
+
+@app.route("/")
+def root():
+    return "<p>Hello, World!</p>"

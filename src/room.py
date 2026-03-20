@@ -1,6 +1,9 @@
 from enum import Enum
 from nanoid import generate
-from player import Player
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from player import Player
 
 class VoteState(Enum):
     NO = 0
