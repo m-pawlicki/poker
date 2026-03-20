@@ -13,12 +13,12 @@ room_manager = RoomManager()
 def root():
     return "<p>Planning Poker</p>"
 
-@app.route("/rooms", methods=["GET"])
+@app.route("/api/rooms", methods=["GET"])
 def list_rooms():
     rooms = [room.to_dict() for room in room_manager.active_rooms()]
     return jsonify(rooms)
 
-@app.route("/rooms", methods=["POST"])
+@app.route("/api/rooms", methods=["POST"])
 def create_room():
     data = request.get_json()
     host_name = data.get("name")
@@ -29,14 +29,14 @@ def create_room():
     return jsonify({"room": room.to_dict(), "host": host.to_dict()}), 200
 
 
-@app.route("/rooms/<room_id>", methods=["GET"])
+@app.route("/api/rooms/<room_id>", methods=["GET"])
 def get_room(room_id):
     room = room_manager.get_room_by_id(room_id)
     if not room:
         return jsonify({"error": "Room not found"}), 404
     return jsonify(room.to_dict()), 200
 
-@app.route("/rooms/<room_id>/join", methods=["POST"])
+@app.route("/api/rooms/<room_id>/join", methods=["POST"])
 def join_room(room_id):
     data = request.get_json()
     name = data.get("name")
@@ -49,7 +49,7 @@ def join_room(room_id):
     room.add_player(player)
     return jsonify({"room": room.to_dict(), "player": player.to_dict()}), 200
 
-@app.route("/rooms/<room_id>/play/<card>", methods=["POST"])
+@app.route("/api/rooms/<room_id>/play/<card>", methods=["POST"])
 def play_card(room_id, card):
     data = request.get_json()
     player_id = data.get("player_id")
@@ -64,7 +64,7 @@ def play_card(room_id, card):
     return jsonify(room.to_dict()), 200
 
 
-@app.route("/rooms/<room_id>/start", methods=["POST"])
+@app.route("/api/rooms/<room_id>/start", methods=["POST"])
 def start_voting(room_id):
     data = request.get_json()
     player_id = data.get("player_id")
@@ -74,10 +74,10 @@ def start_voting(room_id):
     if room.host_id != player_id:
         return jsonify({"error": "Only the host can start voting"}), 403
     room.start_voting()
-    return jsonify({room.to_dict()}), 200
+    return jsonify(room.to_dict()), 200
 
 
-@app.route("/rooms/<room_id>/end", methods=["POST"])
+@app.route("/api/rooms/<room_id>/end", methods=["POST"])
 def end_voting(room_id):
     data = request.get_json()
     player_id = data.get("player_id")
@@ -87,9 +87,9 @@ def end_voting(room_id):
     if room.host_id != player_id:
         return jsonify({"error": "Only the host can end voting"}), 403
     room.end_voting()
-    return jsonify({room.to_dict()}), 200
+    return jsonify(room.to_dict()), 200
 
-@app.route("/rooms/<room_id>/reset", methods=["POST"])
+@app.route("/api/rooms/<room_id>/reset", methods=["POST"])
 def reset_room(room_id):
     data = request.get_json()
     player_id = data.get("player_id")
@@ -99,4 +99,4 @@ def reset_room(room_id):
     if room.host_id != player_id:
         return jsonify({"error": "Only the host can reset the room"}), 403
     room.reset_room()
-    return jsonify({room.to_dict()}), 200
+    return jsonify(room.to_dict()), 200

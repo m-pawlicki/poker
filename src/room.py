@@ -40,7 +40,7 @@ class RoomManager:
     def find_room_by_player_id(self, player_id: str):
         for room in self.room_list:
             for player in room.player_list:
-                if player_id == player.room_id:
+                if player_id == player.player_id:
                     return room
         return None
 
@@ -77,7 +77,7 @@ class Room:
 
     def get_player(self, player_id: str):
         for player in self.player_list:
-            if player.room_id == player_id:
+            if player.player_id == player_id:
                 return player
         return None
 
@@ -102,7 +102,7 @@ class Room:
         return {
             "room_id": self.room_id,
         "host_id" : self.host_id,
-        "vote_state": self.vote_state,
+        "vote_state": self.vote_state.name,
         "curr_story": self.curr_story,
         "player_list": [player.to_dict() for player in self.player_list],
         }
