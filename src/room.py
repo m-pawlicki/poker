@@ -89,9 +89,10 @@ class Room:
         self.vote_state = VoteState.END
         return self.vote_state
     
-    def reset_round(self):
+    def reset_room(self):
         for player in self.player_list:
             player.clear_card()
+        self.vote_state = VoteState.NO
     
     def update_story(self, story: str):
         self.curr_story = story

@@ -5,7 +5,7 @@ from room import Room, RoomManager
 
 class Player:
     def __init__(self, name: str):
-        self.id = generate()
+        self.id = generate(size=10)
         self.name = name
         self.is_host = False
         self.played_card = ""
@@ -27,9 +27,10 @@ class Player:
         room.remove_player(self.id)
         self.room_id = None
 
-    def change_name(self, name):
-        self.name = name
-        return self.name
+    # Will need to handle case for if a host changes name
+    #def change_name(self, name):
+    #    self.name = name
+    #    return self.name
     
     def to_dict(self):
         return {
@@ -54,7 +55,7 @@ class Host(Player):
         room_manager.add_room(room)
         return room
 
-    def change_story(self, room: Room, story):
+    def change_story(self, room: Room, story: str):
         room.update_story(story)
 
     def call_vote(self, room: Room):
