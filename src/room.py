@@ -54,10 +54,10 @@ class RoomManager:
 
 class Room:
     def __init__(self):
-        self.room_id = generate(size=8)
+        self.room_id = generate(size=6)
         self.host_id = None
         self.vote_state = VoteState.NO
-        self.curr_story = ""
+        self.story = ""
         self.player_list = []
 
     def set_host(self, host_id: str):
@@ -83,26 +83,27 @@ class Room:
 
     def start_voting(self):
         self.vote_state = VoteState.START
-        return self.vote_state
     
     def end_voting(self):
         self.vote_state = VoteState.END
-        return self.vote_state
     
     def reset_room(self):
         for player in self.player_list:
             player.clear_card()
         self.vote_state = VoteState.NO
+        self.clear_story()
     
     def update_story(self, story: str):
-        self.curr_story = story
-        return self.curr_story
+        self.story = story
+    
+    def clear_story(self):
+        self.story = ""
     
     def to_dict(self):
         return {
             "room_id": self.room_id,
-        "host_id" : self.host_id,
-        "vote_state": self.vote_state.name,
-        "curr_story": self.curr_story,
-        "player_list": [player.to_dict() for player in self.player_list],
+            "host_id" : self.host_id,
+            "vote_state": self.vote_state.name,
+            "story": self.story,
+            "player_list": [player.to_dict() for player in self.player_list],
         }
