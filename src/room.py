@@ -6,9 +6,8 @@ if TYPE_CHECKING:
     from player import Player
 
 class VoteState(Enum):
-    NO = 0
+    END = 0
     START = 1
-    END = 2
 
 class RoomManager:
     def __init__(self):
@@ -56,7 +55,7 @@ class Room:
     def __init__(self):
         self.room_id = generate(size=6)
         self.host_id = None
-        self.vote_state = VoteState.NO
+        self.vote_state = VoteState.END
         self.story = ""
         self.player_list = []
 
@@ -87,10 +86,10 @@ class Room:
     def end_voting(self):
         self.vote_state = VoteState.END
     
-    def reset_room(self):
+    def reset(self):
         for player in self.player_list:
             player.clear_card()
-        self.vote_state = VoteState.NO
+        self.vote_state = VoteState.END
         self.clear_story()
     
     def update_story(self, story: str):

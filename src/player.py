@@ -59,7 +59,7 @@ class Host(Player):
         if room.host_id == self.player_id:
             room.update_story(story)
 
-    def call_vote(self, room: Room):
+    def start_vote(self, room: Room):
         if room.host_id == self.player_id:
             room.start_voting()
 
@@ -69,7 +69,7 @@ class Host(Player):
 
     def reset_room(self, room: Room):
         if room.host_id == self.player_id:
-            room.reset_room()
+            room.reset()
 
     def invite_players(self):
         return "Invite sent"

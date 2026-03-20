@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from player import Player, Host
-from room import Room, RoomManager
+from room import Room, RoomManager, VoteState
 from cards import Cards
 
 
@@ -59,6 +59,8 @@ def play_card(room_id):
     player = room.get_player(player_id)
     if player is None:
         return jsonify({"error": "Player not found"}), 404
+    if room.vote_state != VoteState.START:
+        return jsonify({"error": "Voting hasn't started yet"}), 403
     if player.play_card(card) is None:
         return jsonify({"error": "Invalid card"}), 400
     return jsonify(player.to_dict()), 200
@@ -71,9 +73,12 @@ def update_story(room_id):
     room = room_manager.get_room_by_id(room_id)
     if not room:
         return jsonify({"error": "Room not found"}), 404
+    player = room.get_player(player_id)
+    if player is None:
+        return jsonify({"error": "Player not found"}), 404
     if room.host_id != player_id:
         return jsonify({"error": "Only the host can set a story"}), 403
-    room.update_story(story)
+    player.change_story(room, story)
     return jsonify(room.to_dict()), 200
 
 
@@ -84,9 +89,12 @@ def start_voting(room_id):
     room = room_manager.get_room_by_id(room_id)
     if not room:
         return jsonify({"error": "Room not found"}), 404
+    player = room.get_player(player_id)
+    if player is None:
+        return jsonify({"error": "Player not found"}), 404
     if room.host_id != player_id:
         return jsonify({"error": "Only the host can start voting"}), 403
-    room.start_voting()
+    player.start_vote(room)
     return jsonify(room.to_dict()), 200
 
 
@@ -97,9 +105,12 @@ def end_voting(room_id):
     room = room_manager.get_room_by_id(room_id)
     if not room:
         return jsonify({"error": "Room not found"}), 404
+    player = room.get_player(player_id)
+    if player is None:
+        return jsonify({"error": "Player not found"}), 404
     if room.host_id != player_id:
         return jsonify({"error": "Only the host can end voting"}), 403
-    room.end_voting()
+    player.end_vote(room)
     return jsonify(room.to_dict()), 200
 
 @app.route("/api/room/<room_id>/reset", methods=["POST"])
@@ -109,7 +120,10 @@ def reset_room(room_id):
     room = room_manager.get_room_by_id(room_id)
     if not room:
         return jsonify({"error": "Room not found"}), 404
+    player = room.get_player(player_id)
+    if player is None:
+        return jsonify({"error": "Player not found"}), 404
     if room.host_id != player_id:
         return jsonify({"error": "Only the host can reset the room"}), 403
-    room.reset_room()
+    player.reset_room(room)
     return jsonify(room.to_dict()), 200
