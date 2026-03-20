@@ -27,20 +27,20 @@ class RoomManager:
 
     def get_room_by_id(self, room_id: str):
         for room in self.room_list:
-            if room.id == room_id:
+            if room.room_id == room_id:
                 return room
         return None
     
     def find_room_by_host_id(self, host_id: str):
         for room in self.room_list:
-            if room.creator_id == host_id:
+            if room.host_id == host_id:
                 return room
         return None
     
     def find_room_by_player_id(self, player_id: str):
         for room in self.room_list:
             for player in room.player_list:
-                if player_id == player.id:
+                if player_id == player.room_id:
                     return room
         return None
 
@@ -54,20 +54,20 @@ class RoomManager:
 
 class Room:
     def __init__(self):
-        self.id = generate(size=8)
-        self.creator_id = None
+        self.room_id = generate(size=8)
+        self.host_id = None
         self.vote_state = VoteState.NO
         self.curr_story = ""
         self.player_list = []
 
     def set_host(self, host_id: str):
-        self.creator_id = host_id
+        self.host_id = host_id
 
     def add_player(self, player: Player):
         for entry in self.player_list:
-            if entry.id == player.id:
+            if entry.player_id == player.player_id:
                 return
-        player.room_id = self.id
+        player.room_id = self.room_id
         self.player_list.append(player)
 
     def remove_player(self, player_id: str):
@@ -77,7 +77,7 @@ class Room:
 
     def get_player(self, player_id: str):
         for player in self.player_list:
-            if player.id == player_id:
+            if player.room_id == player_id:
                 return player
         return None
 
@@ -100,8 +100,8 @@ class Room:
     
     def to_dict(self):
         return {
-            "id": self.id,
-        "creator_id" : self.creator_id,
+            "room_id": self.room_id,
+        "host_id" : self.host_id,
         "vote_state": self.vote_state,
         "curr_story": self.curr_story,
         "player_list": [player.to_dict() for player in self.player_list],
