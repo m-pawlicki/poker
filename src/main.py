@@ -1,4 +1,3 @@
-from room import RoomManager
 from flask import Flask, jsonify, request
 from player import Player, Host
 from room import Room, RoomManager
@@ -50,7 +49,7 @@ def join_room(room_id):
     return jsonify({"room": room.to_dict(), "player": player.to_dict()}), 200
 
 @app.route("/api/room/<room_id>/play", methods=["POST"])
-def play_card(room_id, card):
+def play_card(room_id):
     data = request.get_json()
     player_id = data.get("player_id")
     card = data.get("card")
@@ -62,7 +61,7 @@ def play_card(room_id, card):
         return jsonify({"error": "Player not found"}), 404
     if player.play_card(card) is None:
         return jsonify({"error": "Invalid card"}), 400
-    return jsonify(room.to_dict()), 200
+    return jsonify(player.to_dict()), 200
 
 @app.route("/api/room/<room_id>/story", methods=["POST"])
 def update_story(room_id):
