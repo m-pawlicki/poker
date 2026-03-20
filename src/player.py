@@ -21,11 +21,10 @@ class Player:
     
     def join_room(self, room: Room):
         room.add_player(self)
-        return room
 
     def leave_room(self, room: Room):
         room.remove_player(self.id)
-        return room
+        self.room_id = None
 
     def change_name(self, name):
         self.name = name
@@ -48,10 +47,12 @@ class Host(Player):
         room.update_story(story)
 
     def call_vote(self, room: Room):
-        room.start_voting()
+        if room.creator_id == self.id:
+            room.start_voting()
 
     def end_vote(self, room: Room):
-        room.end_voting()
+        if room.creator_id == self.id:
+            room.end_voting()
 
     def invite_players(self):
         return "Invite sent"
