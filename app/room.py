@@ -3,7 +3,7 @@ from nanoid import generate
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from player import Player
+    from .player import Player
 
 class VoteState(Enum):
     END = 0

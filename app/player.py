@@ -1,7 +1,7 @@
 
 from nanoid import generate
-from cards import Cards
-from room import Room, RoomManager
+from .cards import Cards
+from .room import Room, RoomManager
 
 class Player:
     def __init__(self, name: str):

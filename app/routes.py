@@ -1,16 +1,14 @@
-from flask import Flask, jsonify, request
-from player import Player, Host
-from room import Room, RoomManager, VoteState
-from cards import Cards
-
-
-app = Flask(__name__)
+from app import app
+from flask import jsonify, request, render_template
+from .player import Player, Host
+from .room import Room, RoomManager, VoteState
+from .cards import Cards
 
 room_manager = RoomManager()
 
 @app.route("/")
 def root():
-    return "<p>Planning Poker</p>"
+    return render_template("index.html", title="Home")
 
 @app.route("/api/room", methods=["GET"])
 def list_rooms():
