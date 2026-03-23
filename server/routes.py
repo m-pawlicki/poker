@@ -1,14 +1,10 @@
-from app import app
+from server import app
 from flask import jsonify, request, render_template
 from .player import Player, Host
 from .room import Room, RoomManager, VoteState
 from .cards import Cards
 
 room_manager = RoomManager()
-
-@app.route("/")
-def root():
-    return render_template("index.html", title="Home")
 
 @app.route("/api/room", methods=["GET"])
 def list_rooms():
